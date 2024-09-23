@@ -1,9 +1,9 @@
 #pragma once
 
 #include <cstdint>
+#include <deque>
 #include <string>
 #include <string_view>
-#include <deque>
 
 class Reader;
 class Writer;
@@ -25,7 +25,7 @@ public:
 protected:
   // Please add any additional state to the ByteStream here, and not to the Writer and Reader interfaces.
   uint64_t capacity_;
-  std::deque<char> buffer_;
+  std::deque<char> buffer_;//注意deque分块存储可能导致转换string_view时出现地址越界
   bool error_ {};
   uint64_t write_cnt_ { 0 }; // Position to write in the buffer
   uint64_t read_cnt_ { 0 };  // Position to read from the buffer

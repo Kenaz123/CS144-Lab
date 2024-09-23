@@ -14,9 +14,9 @@ void Writer::push( string data )
 {
   // Your code here.
   size_t len = capacity_ - buffer_.size();
-  size_t push_len = min(len, data.size());
-  for (size_t i = 0; i < push_len; i++) {
-    buffer_.push_back(data[i]);
+  size_t push_len = min( len, data.size() );
+  for ( size_t i = 0; i < push_len; i++ ) {
+    buffer_.push_back( data[i] );
   }
   write_cnt_ += push_len;
   (void)data;
@@ -56,26 +56,20 @@ uint64_t Reader::bytes_popped() const
 string_view Reader::peek() const
 {
   // Your code here.
-  // string str = "";
-  // str += buffer_[0];
-  // return str;
-  // 确保 buffer 不为空
-    if (buffer_.empty()) {
-        return ""; // 或者返回一个空的 string_view，取决于您的需求
-    }
-    
-    // 返回指向缓冲区的第一个字节的视图
-    return string_view(&buffer_.front(), 1); // 假设 buffer_ 是 std::vector或std::deque
+  if ( buffer_.empty() ) {
+    return ""; 
+  }
+  return string_view( &buffer_.front(), 1 );
 }
 
 void Reader::pop( uint64_t len )
 {
   // Your code here.
-  if (len > bytes_buffered()) {
+  if ( len > bytes_buffered() ) {
     set_error();
     return;
   }
-  for (size_t i = 0; i < len; i++) {
+  for ( size_t i = 0; i < len; i++ ) {
     buffer_.pop_front();
   }
   read_cnt_ += len;
