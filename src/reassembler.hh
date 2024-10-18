@@ -2,11 +2,18 @@
 
 #include "byte_stream.hh"
 
+#include <algorithm>
+#include <cstdint>
+#include <limits>
+#include <map>
+#include <string>
+
 class Reassembler
 {
 public:
   // Construct Reassembler to write into given ByteStream.
-  explicit Reassembler( ByteStream&& output ) : output_( std::move( output ) ) {}
+  // explicit Reassembler( ByteStream&& output ) : output_( std::move( output ) ) {}
+  explicit Reassembler( ByteStream&& output ) : output_( std::move( output ) ), pending_data_() {}
 
   /*
    * Insert a new substring to be reassembled into a ByteStream.
@@ -41,5 +48,8 @@ public:
   const Writer& writer() const { return output_.writer(); }
 
 private:
-  ByteStream output_; // the Reassembler writes to this ByteStream
+  ByteStream output_;                                           // the Reassembler writes to this ByteStream
+  std::map<uint64_t, std::string> pending_data_;                // indexed substrings that can't yet be written
+  uint64_t cur_index_ { 0 };                                    // the index of the first byte in the reassembler
+  uint64_t eof_index_ { std::numeric_limits<uint64_t>::max() }; // the index of the last byte in the entire stream
 };
