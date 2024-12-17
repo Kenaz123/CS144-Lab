@@ -1,6 +1,8 @@
 #pragma once
 
+#include <map>
 #include <queue>
+#include <unordered_map>
 
 #include "address.hh"
 #include "ethernet_frame.hh"
@@ -81,4 +83,9 @@ private:
 
   // Datagrams that have been received
   std::queue<InternetDatagram> datagrams_received_ {};
+  // map:生命周期，multimap：地址映射
+  std::unordered_map<uint32_t, std::pair<uint32_t, EthernetAddress>> arp_table_ {};
+  std::unordered_map<uint32_t, std::pair<uint32_t, EthernetFrame>> arp_life_ {};
+  std::multimap<uint32_t, EthernetFrame> wait_queue_ {};
+  uint32_t cur_time { 0 };
 };

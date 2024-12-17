@@ -105,7 +105,7 @@ void TCPSender::tick( uint64_t ms_since_last_tick, const TransmitFunction& trans
   }
   timer_elapsed_ += ms_since_last_tick;
   if ( timer_elapsed_ >= rto_ ) {
-    transmit( segments_outstanding_.front() ); 
+    transmit( segments_outstanding_.front() );
     if ( window_size_ > 0 ) {
       consecutive_retransmissions_++;
       rto_ *= 2;
