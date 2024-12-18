@@ -52,7 +52,6 @@ void NetworkInterface::send_datagram( const InternetDatagram& dgram, const Addre
         .payload = serialize(dgram),
       };
     wait_queue_.emplace( next_hop.ipv4_numeric(), waitframe );
-    // datagrams_received_.emplace(dgram);
     transmit( ethernetframe );
     return;
   }
@@ -74,7 +73,8 @@ void NetworkInterface::recv_frame( const EthernetFrame& frame )
     if ( parse( dgram, frame.payload ) ) {
       datagrams_received_.emplace( dgram );
       return;
-    }
+    } else
+      cerr << "DEBUG: Failed to parse IPv4 datagram\n";
   }
   ARPMessage arpmessage;
   if ( parse( arpmessage, frame.payload ) ) {
